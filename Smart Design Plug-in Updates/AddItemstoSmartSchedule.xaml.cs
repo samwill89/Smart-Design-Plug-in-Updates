@@ -23,14 +23,17 @@ namespace Smart_Design_Plug_in_Updates
     {
         public Dictionary<string, List<Element>> ElementsGroupsGeneral =new Dictionary<string, List<Element>>();
         public Document docGeneral;
-        public AddItemstoSmartSchedule(Dictionary<string, List<Element>> ElementsGroups,Document doc)
+        public string PID;
+        public AddItemstoSmartSchedule(Dictionary<string, List<Element>> ElementsGroups,Document doc,string ProjectID)
         {
             InitializeComponent();
             ElementsGroupsGeneral = ElementsGroups;
             docGeneral = doc;
             List<string> GroupNames = new List<string>();
-            Grid1.ItemsSource = ClustersData.GetData(ElementsGroups,doc, "Check None",GroupNames);
-            NumberOfGroups.Text=ClustersData.GetData(ElementsGroups, doc, "Check None", GroupNames).Count.ToString();
+            Grid1.ItemsSource = ClustersData.GetData(ElementsGroups,doc, "Check None",GroupNames,ProjectID);
+            NumberOfGroups.Text=ClustersData.GetData(ElementsGroups, doc, "Check None", GroupNames,ProjectID).Count.ToString();
+            PID=ProjectID;
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -41,13 +44,13 @@ namespace Smart_Design_Plug_in_Updates
         private void Check_All(object sender, RoutedEventArgs e)
         {
             List<string> GroupNames = new List<string>();
-            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check All", GroupNames);
+            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check All", GroupNames,PID);
         }
 
         private void Check_None(object sender, RoutedEventArgs e)
         {
             List<string> GroupNames = new List<string>();
-            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check None", GroupNames);
+            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check None", GroupNames,PID);
         }
 
         private void Check_Selected(object sender, RoutedEventArgs e)
@@ -64,7 +67,7 @@ namespace Smart_Design_Plug_in_Updates
                 string GroupName=Family+ "__Splitter__" + Type+ "__Splitter__" + Location;
                 GroupNames.Add(GroupName);
             }
-            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check Selected", GroupNames);
+            Grid1.ItemsSource = ClustersData.GetData(ElementsGroupsGeneral, docGeneral, "Check Selected", GroupNames,PID);
         }
 
         private void CreateSchedule(object sender, RoutedEventArgs e)

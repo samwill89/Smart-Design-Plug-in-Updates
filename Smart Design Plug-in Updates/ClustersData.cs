@@ -12,6 +12,15 @@ namespace Smart_Design_Plug_in_Updates
     {
 
         public bool Checked { get; set; }
+
+        public string RecordID { get; set; }
+
+        public string RevitID { get; set; }
+
+        public string ProjectNumber { get; set; }
+
+        public string ItemNumber { get; set; }
+
         public string Family__Type { get; set; }
 
         public string Location { get; set; }
@@ -29,7 +38,7 @@ namespace Smart_Design_Plug_in_Updates
         public string Website { get; set; }
 
 
-        public static ObservableCollection<ClustersData> GetData(Dictionary<string, List<Element>> ElementsGroups,Document doc,string Selection,List<string>GroupNames)
+        public static ObservableCollection<ClustersData> GetData(Dictionary<string, List<Element>> ElementsGroups,Document doc,string Selection,List<string>GroupNames,string PID)
         {
             
             var Data = new ObservableCollection<ClustersData>();
@@ -45,7 +54,8 @@ namespace Smart_Design_Plug_in_Updates
                 string GroupName = FamilyAndTypeAndRoom[0] + "____" + FamilyAndTypeAndRoom[1];
                 string Location= FamilyAndTypeAndRoom[2];
 
-                
+                string ProjectID = PID;
+
                 int Quantity = ElementsGroups[Group].Count;
                 string Vendor="";
                 if (eleType.LookupParameter("Vendor") != null)
@@ -99,7 +109,7 @@ namespace Smart_Design_Plug_in_Updates
                 }
                 #endregion
 
-                Data.Add(new ClustersData() { Checked = Checked, Family__Type = GroupName,Location=Location, Quantity = Quantity,Vendor=Vendor,Manufacturer=Manufacturer,Model=Model,Description=Description,Website= Website });
+                Data.Add(new ClustersData() { Checked = Checked,RevitID=ProjectID, Family__Type = GroupName,Location=Location, Quantity = Quantity,Vendor=Vendor,Manufacturer=Manufacturer,Model=Model,Description=Description,Website= Website });
             }
 
             #endregion

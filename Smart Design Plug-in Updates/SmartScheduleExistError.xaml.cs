@@ -64,10 +64,11 @@ namespace Smart_Design_Plug_in_Updates
             
             for(int i = 0; i < NumberOfDataRows; i++)
             {
-                string ItemsName = tsd.GetCellText(i + 2, 0);
-                string Location = tsd.GetCellText(i + 2, 1);
+                string ItemsNum = tsd.GetCellText(i + 2, 3);
+                string ItemsName = tsd.GetCellText(i + 2, 4);
+                string Location = tsd.GetCellText(i + 2, 5);
                 string NameAndLocation = ItemsName + "__Splitter__" + Location;
-                string Quantity = tsd.GetCellText(i + 2, 2);
+                string Quantity = tsd.GetCellText(i + 2, 6);
                 Data.Add(NameAndLocation, Quantity);
             }
             #endregion
