@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Smart_Design_Plug_in_Updates
 {
     /// <summary>
@@ -64,25 +65,35 @@ namespace Smart_Design_Plug_in_Updates
             
             for(int i = 0; i < NumberOfDataRows; i++)
             {
-                string ItemsNum = tsd.GetCellText(i + 2, 3);
-                string ItemsName = tsd.GetCellText(i + 2, 4);
-                string Location = tsd.GetCellText(i + 2, 5);
-                string NameAndLocation = ItemsName + "__Splitter__" + Location;
-                string Quantity = tsd.GetCellText(i + 2, 6);
-                Data.Add(NameAndLocation, Quantity);
+                if (tsd.GetCellText(i + 2, 3)==" ")
+                {
+                    string ItemsNum = tsd.GetCellText(i + 2, 3);
+                    string ItemsName = tsd.GetCellText(i + 2, 4);
+                    string Location = tsd.GetCellText(i + 2, 5);
+                    string NameAndLocation = ItemsName + "__Splitter__" + Location;
+                    string Quantity = tsd.GetCellText(i + 2, 6);
+                    Data.Add(NameAndLocation, Quantity);
+                }
+                
             }
             #endregion
+
+            if (Data.Count != 0)
+            {
+                Close();
+                Existing_DataSchedule x = new Existing_DataSchedule(Data, ItemToAddToSchedule, GenerelDocument);
+                x.Height = 510;
+                x.Width = 600;
+                double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+                double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+                double windowWidth = x.Width;
+                double windowHeight = x.Height;
+                x.Left = (screenWidth / 2) - (windowWidth / 2);
+                x.Top = (screenHeight / 2) - (windowHeight / 2);
+                x.ShowDialog();
+            }
             Close();
-            Existing_DataSchedule x = new Existing_DataSchedule(Data,ItemToAddToSchedule, GenerelDocument);
-            x.Height = 510;
-            x.Width = 600;
-            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
-            double windowWidth = x.Width;
-            double windowHeight = x.Height;
-            x.Left = (screenWidth / 2) - (windowWidth / 2);
-            x.Top = (screenHeight / 2) - (windowHeight / 2);
-            x.ShowDialog();
+            
         }
     }
 }

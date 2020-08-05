@@ -111,24 +111,105 @@ namespace Smart_Design_Plug_in_Updates
                     }
                     #endregion
 
-                    SmartScheduleExistError x = new SmartScheduleExistError(ScheduleItemsTwo, docGeneral);
-                    x.Height = 160;
-                    x.Width = 350;
-                    double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-                    double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
-                    double windowWidth = x.Width;
-                    double windowHeight = x.Height;
-                    x.Left = (screenWidth / 2) - (windowWidth / 2);
-                    x.Top = (screenHeight / 2) - (windowHeight / 2);
-                    x.ShowDialog();
 
-                    Close();
+                    #region Check if there are a new data
+                    #region Getting the schedule and its tabs
+                    string scheduleTitle = "Smart Schedule";
+                    ViewSchedule smartSchedule = (from v in new FilteredElementCollector(docGeneral)
+                                 .OfClass(typeof(ViewSchedule))
+                                 .Cast<ViewSchedule>()
+                                                  where v.Name == scheduleTitle
+                                                  select v).FirstOrDefault();
+                    #endregion
+
+                    #region Get the table data
+                    var tableData = smartSchedule.GetTableData();
+                    var tsd = tableData.GetSectionData(SectionType.Header);
+                    #endregion
+
+                    #region Get number or rows and columns
+                    int NumberOfColumns = tsd.LastColumnNumber;
+                    int NumberOfRows = tsd.LastRowNumber;
+                    int NumberOfDataRows = NumberOfRows - 2;
+                    #endregion
+
+                    #region Get Data
+                    Dictionary<string, string> Data = new Dictionary<string, string>();
+
+                    for (int i = 0; i < NumberOfDataRows; i++)
+                    {
+                        if (tsd.GetCellText(i + 2, 3) == " ")
+                        {
+                            string ItemsNum = tsd.GetCellText(i + 2, 3);
+                            string ItemsName = tsd.GetCellText(i + 2, 4);
+                            string Location = tsd.GetCellText(i + 2, 5);
+                            string NameAndLocation = ItemsName + "__Splitter__" + Location;
+                            string Quantity = tsd.GetCellText(i + 2, 6);
+                            Data.Add(NameAndLocation, Quantity);
+                        }
+
+                    }
+                    #endregion
+
+                    if (Data.Count == 0)
+                    {
+                        #region Adding items to the schedule         
+
+                        Synchronize.AddDataToSmartSchedule Adding = new Synchronize.AddDataToSmartSchedule();
+                        Adding.AddDataInternal(ScheduleItemsTwo, docGeneral);
+                        #endregion
+                        Close();
+                    }
+
+                    #endregion
+                    else
+                    {
+                        SmartScheduleExistError x = new SmartScheduleExistError(ScheduleItemsTwo, docGeneral);
+                        x.Height = 160;
+                        x.Width = 350;
+                        double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+                        double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+                        double windowWidth = x.Width;
+                        double windowHeight = x.Height;
+                        x.Left = (screenWidth / 2) - (windowWidth / 2);
+                        x.Top = (screenHeight / 2) - (windowHeight / 2);
+                        x.ShowDialog();
+
+                        Close();
+                    }
+                    
                 }
             }
             else
             {
-                MessageBoxButton buttons = MessageBoxButton.OK;
-                MessageBox.Show("Please choose a group","Error",buttons,MessageBoxImage.Error);
+                MessageBoxButton buttons = MessageBoxButton.OKCancel;
+                var UserResp = MessageBox.Show("No items have been selected do you want to make an empty schedule?","Warning",buttons,MessageBoxImage.Warning);
+
+                if (UserResp.ToString() == "OK")
+                {
+                    #region Send to create schedule class
+                    CreateSmartSchedule create = new CreateSmartSchedule();
+                    string Exist = create.CreateSchedule(docGeneral, ScheduleItems);
+                    #endregion
+
+                    if (Exist == "Do Not Exist")
+                    {
+                        MessageBoxButton buttons1 = MessageBoxButton.OK;
+                        MessageBox.Show("Smart Schedule Created Sucessfully", "Done", buttons1, MessageBoxImage.Information);
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBoxButton buttons1 = MessageBoxButton.OK;
+                        MessageBox.Show("Smart Schedule Already Exists", "Error", buttons1, MessageBoxImage.Error);
+                        Close();
+                    }
+
+                }
+                else
+                {
+                    Close();
+                }
             }
 
             
