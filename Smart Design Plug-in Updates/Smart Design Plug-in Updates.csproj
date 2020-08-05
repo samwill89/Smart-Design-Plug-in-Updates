@@ -90,7 +90,6 @@
     <Compile Include="Synchronize\AddDataToSmartSchedule.cs" />
     <Compile Include="Synchronize\ExtractDataFromSchedule.cs" />
     <Compile Include="Synchronize\IdentifyingChosenMethod.cs" />
-    <Compile Include="Synchronize\IntializeFileMakerMethod.cs" />
     <Compile Include="Synchronize\NaturalComparer.cs" />
     <Compile Include="Synchronize\Sortrecords.cs" />
     <Compile Include="Synchronize\Update.cs" />

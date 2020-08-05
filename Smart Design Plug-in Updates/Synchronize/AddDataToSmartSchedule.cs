@@ -82,7 +82,7 @@ namespace Smart_Design_Plug_in_Updates.Synchronize
                     tsd.SetColumnWidth(11, (stringLen / 25 + 1));
                     tsd.InsertRow(tsd.FirstRowNumber + 2 + x);
 
-                    string RecordID = Da.RecordID;
+                    string RecordID = Da.FileMakerRecordId.ToString();
                     if (RecordID == null)
                     {
                         RecordID = " ";
